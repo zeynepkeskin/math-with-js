@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const WIDTH = parseInt(canvas.getAttribute("width"));
+      const HEIGHT = parseInt(canvas.getAttribute("height"));
+      function drawCoordinatePlane() {
+        drawLine(0, HEIGHT / 2, 0, -HEIGHT / 2, "lightgray", 1);
+        drawLine(-WIDTH / 2, 0, WIDTH / 2, 0, "lightgray", 1);
+      }
+      drawCoordinatePlane();
+
+      function drawLine(x1, y1, x2, y2, color = "green", weight = 2) {
+        let aX1 = WIDTH / 2 + x1;
+        let aY1 = HEIGHT / 2 - y1;
+        let aX2 = WIDTH / 2 + x2;
+        let aY2 = HEIGHT / 2 - y2;
+
+        ctx.beginPath(); // Start a new path
+        ctx.moveTo(aX1, aY1); // Starting point (x, y)
+        ctx.lineTo(aX2, aY2); // Ending point (x, y)
+        ctx.strokeStyle = color; // Set line color
+        ctx.lineWidth = weight; // Set line thickness
+        ctx.stroke(); // Draw the line
+      }
+      function y(x) {
+        x = x - 100;
+        return Math.abs(x) + 100;
+      }
+
+      for (let x = -WIDTH / 2; x < WIDTH / 2; x += 1) {
+        let x1 = x;
+        let y1 = y(x1);
+        let x2 = x + 1;
+        let y2 = y(x2);
+        drawLine(x1, y1, x2, y2);
+      }
+    </script>
+  </body>
+</html>
