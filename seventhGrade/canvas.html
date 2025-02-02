@@ -18,10 +18,24 @@
       const ctx = canvas.getContext("2d");
       const WIDTH = parseInt(canvas.getAttribute("width"));
       const HEIGHT = parseInt(canvas.getAttribute("height"));
+      //const RANGE = [-1, 1];
+      //const DOMAIN = [-Math.PI, Math.PI];
+      let ZOOM = 70;
       function drawCoordinatePlane() {
         drawLine(0, HEIGHT / 2, 0, -HEIGHT / 2, "lightgray", 1);
         drawLine(-WIDTH / 2, 0, WIDTH / 2, 0, "lightgray", 1);
       }
+      canvas.addEventListener(
+        "wheel",
+        function (event) {
+          event.preventDefault();
+          ZOOM += event.wheelDelta / 10;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawCoordinatePlane();
+          drawGraph();
+        },
+        false
+      );
       drawCoordinatePlane();
 
       function drawLine(x1, y1, x2, y2, color = "green", weight = 2) {
@@ -38,17 +52,18 @@
         ctx.stroke(); // Draw the line
       }
       function y(x) {
-        x = x - 100;
-        return Math.abs(x) + 100;
+        return Math.tan(x);
       }
-
-      for (let x = -WIDTH / 2; x < WIDTH / 2; x += 1) {
-        let x1 = x;
-        let y1 = y(x1);
-        let x2 = x + 1;
-        let y2 = y(x2);
-        drawLine(x1, y1, x2, y2);
+      function drawGraph() {
+        for (let x = -ZOOM; x < ZOOM; x += ZOOM / 100) {
+          let x1 = x;
+          let y1 = y(x1);
+          let x2 = x + ZOOM / 100;
+          let y2 = y(x2);
+          drawLine(x1 * ZOOM, y1 * ZOOM, x2 * ZOOM, y2 * ZOOM);
+        }
       }
+      drawGraph();
     </script>
   </body>
 </html>
